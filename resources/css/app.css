@@ -1,0 +1,86 @@
+/* General body styles */
+body {
+    background-color: #f8f8f8; /* Light background for the whole page */
+    color: #333333; /* Default dark text */
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;  /* Ensures body takes full height */
+}
+
+/* Main content area */
+main {
+    flex-grow: 1; /* This ensures the main content takes up remaining space */
+}
+
+/* Navbar styles */
+.navbar {
+    background-color: #ffb6c1; /* Light pink navbar */
+    border-bottom: 2px solid #ff8ba7; /* Darker pink border */
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for navbar */
+}
+
+.navbar a.nav-link {
+    color: #000000;
+    font-weight: bold;
+    transition: color 0.3s ease-in-out;
+}
+
+.navbar a.nav-link:hover {
+    color: #5a5a5a; /* Gray on hover */
+}
+
+/* Product card styles */
+.card {
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Card shadow */
+    margin: 15px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: scale(1.05); /* Slightly zoom-in on hover */
+}
+
+.card img {
+    max-height: 200px;
+    object-fit: contain;
+    border-radius: 10px;
+}
+
+.card .product-price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ff8ba7; /* Price color */
+    margin-top: 10px;
+}
+
+/* Pagination styles */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.pagination .page-link {
+    background-color: #ffb6c1;
+    border-radius: 5px;
+    padding: 10px 20px;
+    border: none;
+    color: #000000;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.pagination .page-link:hover {
+    background-color: #e57385;
+}
+
