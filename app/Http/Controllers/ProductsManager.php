@@ -23,33 +23,34 @@ class ProductsManager extends Controller
 
     public function addToCart($id)
     {
+        if (!auth()->check()) {
+            return redirect()->route('login')->with('error', 'Please log in to add products to your cart.');
+        }
+
         try {
             $existingCartItem = Cart::where('user_id', auth()->user()->id)
                 ->where('product_id', $id)
                 ->first();
-    
+
             if ($existingCartItem) {
                 $existingCartItem->quantity += 1;
                 $existingCartItem->save();
-    
+
                 session()->flash('success', 'Product quantity increased in the cart!');
-                logger()->info('Success Flash Message: Product quantity increased in the cart!');
                 return redirect()->route('cart.show');
             }
-    
+
             $cart = new Cart();
             $cart->user_id = auth()->user()->id;
             $cart->product_id = $id;
             $cart->quantity = 1;
-    
+
             if ($cart->save()) {
                 session()->flash('success', 'Product added to cart!');
-                logger()->info('Success Flash Message: Product added to cart!');
                 return redirect()->route('cart.show');
             }
-    
+
             session()->flash('error', 'Failed to add product to cart.');
-            logger()->info('Error Flash Message: Failed to add product to cart.');
             return redirect()->route('cart.show');
         } catch (\Exception $e) {
             logger()->error('Add to cart error: ' . $e->getMessage());
@@ -57,12 +58,13 @@ class ProductsManager extends Controller
             return redirect()->route('cart.show');
         }
     }
-    
-
 
     public function showCart()
     {
-        // Fetch cart items with correct quantities
+        if (!auth()->check()) {
+            return redirect()->route('login')->with('error', 'Please log in to view your cart.');
+        }
+
         $cartItems = DB::table('cart')
             ->join('products', 'cart.product_id', '=', 'products.id')
             ->select(
@@ -80,6 +82,10 @@ class ProductsManager extends Controller
 
     public function removeFromCart($product_id)
     {
+        if (!auth()->check()) {
+            return redirect()->route('login')->with('error', 'Please log in to remove items from your cart.');
+        }
+
         Cart::where('user_id', auth()->user()->id)
             ->where('product_id', $product_id)
             ->delete();
@@ -88,25 +94,26 @@ class ProductsManager extends Controller
     }
 
     public function updateCart(Request $request, $product_id)
-{
-    $request->validate([
-        'quantity' => 'required|integer|min:1', // Validate quantity
-    ]);
+    {
+        if (!auth()->check()) {
+            return redirect()->route('login')->with('error', 'Please log in to update your cart.');
+        }
 
-    // Find the cart item for the user and product
-    $cartItem = Cart::where('user_id', auth()->user()->id)
-        ->where('product_id', $product_id)
-        ->first();
+        $request->validate([
+            'quantity' => 'required|integer|min:1',
+        ]);
 
-    if ($cartItem) {
-        $cartItem->quantity = $request->quantity;  // Update quantity
-        $cartItem->save();  // Save the updated item
+        $cartItem = Cart::where('user_id', auth()->user()->id)
+            ->where('product_id', $product_id)
+            ->first();
 
-        return redirect()->route('cart.show')->with('success', 'Quantity updated successfully!');
+        if ($cartItem) {
+            $cartItem->quantity = $request->quantity;
+            $cartItem->save();
+
+            return redirect()->route('cart.show')->with('success', 'Quantity updated successfully!');
+        }
+
+        return redirect()->route('cart.show')->with('error', 'Product not found in cart.');
     }
-
-    // If cart item is not found
-    return redirect()->route('cart.show')->with('error', 'Product not found in cart.');
-}
-
 }

@@ -43,7 +43,11 @@
                         </div>
                         <div class="card-body text-center">
                             <h5 class="card-title">
-                                <a href="{{ route('products.details', $product->slug) }}" class="text-decoration-none text-pink-dark">{{ $product->title }}</a>
+                                <a href="{{ route('products.details', $product->slug) }}" 
+                                   class="text-decoration-none" 
+                                   style="color: #ff6f91; font-weight: bold;">
+                                    {{ $product->title }}
+                                </a>
                             </h5>
                             <p class="card-text">
                                 <strong>Price:</strong> LKR {{ number_format($product->price, 2) }}
@@ -57,7 +61,6 @@
                         </div>
                         <div class="card-footer bg-light d-flex justify-content-between">
                             <a href="{{ route('products.details', $product->slug) }}" class="btn" style="background-color: #f06292; color: black; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);">View Details</a>
-                            <!-- Updated "Add to Cart" button with matching colors -->
                             <form action="{{ route('cart.add', $product->id) }}" method="POST">
                                 @csrf
                                 <button type="submit" class="btn" style="background-color: #f06292; color: black; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);">Add to Cart</button>
@@ -126,6 +129,5 @@
             @endif
         </div>
     </section>
-
 </main>
 @endsection
